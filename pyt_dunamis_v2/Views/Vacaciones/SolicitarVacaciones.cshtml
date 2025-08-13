@@ -1,0 +1,39 @@
+﻿@model Entidades.Vacaciones
+@{
+    ViewData["Title"] = "Solicitar Vacaciones";
+    decimal diasDisponibles = ViewBag.DiasDisponibles;
+}
+
+<h2>Solicitar Vacaciones</h2>
+
+<div class="alert alert-info">
+    <strong>Días disponibles:</strong> @diasDisponibles
+</div>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" }) <!--Mensaje de error de ingreso porque ya existe solicitud-->
+<form asp-action="SolicitarVacaciones" method="post" class="form-horizontal">
+    <div class="form-group mb-2">
+        <label asp-for="fecha_inicio_vacaciones" class="control-label">Fecha inicio</label>
+        <input asp-for="fecha_inicio_vacaciones" class="form-control" type="date" />
+        <span asp-validation-for="fecha_inicio_vacaciones" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="fecha_fin_vacaciones" class="control-label">Fecha fin</label>
+        <input asp-for="fecha_fin_vacaciones" class="form-control" type="date" />
+        <span asp-validation-for="fecha_fin_vacaciones" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="cantidad_dias_solicitados" class="control-label">Cantidad de días solicitados</label>
+        <input asp-for="cantidad_dias_solicitados" class="form-control" type="number" min="0.5" step="0.5" />
+        <span asp-validation-for="cantidad_dias_solicitados" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Solicitar</button>
+    <a asp-action="PanelVacaciones" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,33 @@
+﻿@model Entidades.Permisos
+
+@{
+    await Html.RenderPartialAsync("_ConfirmModal");
+}
+
+<h2>@(Model.id_permiso == 0 ? "Crear Permiso" : "Editar Permiso")</h2>
+
+<form id="@((Model.id_permiso == 0) ? "addPermissionForm" : "editPermissionForm")" asp-action="CrearEditarPermiso" asp-controller="Seguridad" method="post">
+    <input type="hidden" asp-for="id_permiso" />
+
+    <div class="form-group">
+        <label asp-for="nom_permiso" class="control-label"></label>
+        <input asp-for="nom_permiso" class="form-control" />
+        <span asp-validation-for="nom_permiso" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="descripcion_permiso" class="control-label"></label>
+        <textarea asp-for="descripcion_permiso" class="form-control"></textarea>
+        <span asp-validation-for="descripcion_permiso" class="text-danger"></span>
+    </div>
+
+    @if (Model.id_permiso == 0)
+    {
+     <button type = "button" class="btn btn-primary action-button" data-action-type="add" data-form-id="addPermissionForm">Guardar</button>
+    }
+    else
+    {
+    <button type="button" class="btn btn-primary action-button" data-action-type="edit" data-form-id="editPermissionForm">Guardar</button>
+    }
+    <a asp-action="Permisos" class="btn btn-secondary">Cancelar</a>
+</form>

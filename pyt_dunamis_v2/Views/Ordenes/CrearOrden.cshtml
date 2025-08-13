@@ -1,0 +1,64 @@
+﻿@model Entidades.Ordenes
+@{
+    ViewData["Title"] = "Crear Orden de Servicio";
+}
+
+@* Mostrar errores generales *@
+@if (ViewBag.OrdenDuplicada != null)
+{
+    <div class="alert alert-danger" id="personaDuplicadaAlerta">
+        @ViewBag.OrdenDuplicada
+    </div>
+}
+
+<h2>Crear Orden de Servicio</h2>
+
+<form asp-action="CrearOrden" method="post" class="form-horizontal">
+    <div class="form-group mb-2">
+        <label asp-for="contrato_cliente" class="form-label">Contrato del Cliente</label>
+        <input asp-for="contrato_cliente" class="form-control requerido"/>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="tipo_trabajo" class="form-label">Tipo de Trabajo</label>
+        <select asp-for="tipo_trabajo" asp-items="ViewBag.TiposTrabajo" class="form-select" required></select>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="fecha_visita" class="form-label">Fecha de Visita</label>
+        <input asp-for="fecha_visita" type="date" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="descripcion_trabajo" class="form-label">Descripción del Trabajo</label>
+        <textarea asp-for="descripcion_trabajo" class="form-control requerido" rows="3" required></textarea>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="estado_orden_id_estado_orden" class="form-label">Estado de la Orden</label>
+        <select asp-for="estado_orden_id_estado_orden" asp-items="ViewBag.Estados" class="form-select" readonly></select>
+    </div>
+
+    <!-- <input type="hidden" asp-for="fecha_creacion" /> -->
+    <input type="hidden" asp-for="colaborador_id_colaborador" />
+    <input type="hidden" asp-for="periodo_nomina_id_periodo_nomina" />
+    <input type="hidden" asp-for="catalogo_estado_aprobacion_id_estado_aprobacion" value=1 />
+
+    <button type="submit" class="btn btn-success">Guardar Orden</button>
+    <a asp-action="ListaOrdenes" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            var mensaje = '@ViewBag.OrdenDuplicada';
+            if (mensaje) {
+                alert(mensaje); // o usar toastr.error(mensaje);
+            }
+        });
+    </script>
+
+
+}

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Entidades.Persona>
+
+@{
+    ViewData["Title"] = "ListaPersonas";
+}
+
+<h1>ListaPersonas</h1>
+
+
+
+<table class="table table-bordered responsive-table">
+    <thead>
+        <tr>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Apellido 1</th>
+            <th>Apellido 2</th>
+            <th>Fecha Nacimiento</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="fila-clickeable" data-id="@item.id_persona">
+                <td data-label="ID">@item.id_persona</td>
+                <td data-label="Nombre">@item.nombre</td>
+                <td data-label="Apellido 1">@item.apellido_1</td>
+                <td data-label="Apellido 2">@item.apellido_2</td>
+                <td data-label="Fecha Nac.">@item.fecha_nacimiento.ToString("yyyy-MM-dd")</td>
+                <td data-label="Estado">
+                    <span class="badge @(item.inactivo ? "bg-danger" : "bg-success")">
+                        @(item.inactivo ? "Inactivo" : "Activo")
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="modalContainer"></div>
+<div id="contenedor-modal-editar"></div>
+<div id="contenedor-modal-eliminar"></div>
+
+@section Scripts {
+    <script src="~/js/modal.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

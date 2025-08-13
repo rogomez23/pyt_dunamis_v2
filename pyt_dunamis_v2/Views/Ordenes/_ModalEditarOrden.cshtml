@@ -1,0 +1,67 @@
+﻿@model OrdenesViewModel
+
+<div class="modal fade" id="editarOrdenModal" tabindex="-1" aria-labelledby="editarOrdenModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarOrdenModalLabel">Editar Orden</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="EditarOrden" asp-controller="Ordenes" method="post">
+                    <input type="hidden" asp-for="id_orden" />
+                    <input type="hidden" asp-for="colaborador_id_colaborador" />
+                    <input type="hidden" asp-for="periodo_nomina_id_periodo_nomina"/>
+                    <input type="hidden" asp-for="catalogo_estado_aprobacion_id_estado_aprobacion"/>
+                    <input type="hidden" name="vistaOrigen" value="@ViewBag.VistaOrigen" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label>Contrato del cliente</label>
+                        <input asp-for="contrato_cliente" class="form-control" />
+                        <span asp-validation-for="contrato_cliente" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de trabajo</label>
+                        <select asp-for="tipo_trabajo" class="form-select">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Instalación de servicio">Instalación de servicio</option>
+                            <option value="Soporte técnico">Soporte técnico</option>
+                            <option value="Reinstalación interna">Reinstalación interna</option>
+                            <option value="Reinstalación externa">Reinstalación externa</option>
+                        </select>
+                        <span asp-validation-for="tipo_trabajo" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha de visita</label>
+                        <input asp-for="fecha_visita" class="form-control" type="date" />
+                        <span asp-validation-for="fecha_visita" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Detalle de la órden</label>
+                        <input asp-for="descripcion_trabajo" class="form-control" />
+                        <span asp-validation-for="descripcion_trabajo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado de la órden</label>
+                        <select asp-for="estado_orden_id_estado_orden"
+                                asp-items="Model.TipoEstadoOrden"
+                                class="form-select"></select>
+                        <span asp-validation-for="estado_orden_id_estado_orden"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

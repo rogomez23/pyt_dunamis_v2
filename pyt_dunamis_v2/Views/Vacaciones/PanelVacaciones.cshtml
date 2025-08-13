@@ -1,0 +1,77 @@
+﻿@model pyt_dunamis_v2.Models.PanelVacacionesViewModel
+@using pyt_dunamis_v2.Helpers
+
+@{
+    ViewData["Title"] = "Panel de Vacaciones";
+}
+
+<h2 class="mb-4">Panel de Vacaciones</h2>
+<!--<p><strong>Roles:</strong> @Context.Session.GetString("Roles")</p>
+<p><strong>Permisos:</strong> @Context.Session.GetString("Permisos")</p>-->
+<!-- Opciones del menú -->
+<ul class="nav nav-tabs mb-3">
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Vacaciones" asp-action="SolicitarVacaciones">Solicitar Vacaciones</a>
+    </li>
+
+    @if (SesionHelper.TienePermiso(Context, "GESTIONAR_VACACIONES_JEFES"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Vacaciones" asp-action="AprobacionVacaciones">Aprobar Vacaciones</a>
+        </li>
+    }
+    @if (SesionHelper.TienePermiso(Context, "GESTIONAR_VACACIONES_PLANILLA"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Vacaciones" asp-action="AprobacionVacaciones">Aprobar vacaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Vacaciones" asp-action="EjecutarVacacionesNomina">Procesar a Nómina</a>
+        </li>
+    }
+
+
+</ul>
+
+<div class="row">
+    <!-- Datos del colaborador -->
+    <div class="col-md-5">
+        <h4>Información del Colaborador</h4>
+        <div class="card">
+            <div class="card-body">
+                <p><strong>ID:</strong> @Model.Colaborador.id_colaborador</p>
+                <p><strong>Nombre:</strong> @Model.Colaborador.Persona.nombre @Model.Colaborador.Persona.apellido_1 @Model.Colaborador.Persona.apellido_2</p>
+                <p><strong>Puesto:</strong> @Model.Colaborador.Catalogo_perfil_puesto.descripcion_puesto</p>
+                <p><strong>Fecha de ingreso:</strong> @Model.Colaborador.fecha_ingreso.ToShortDateString()</p>
+            </div>
+        </div>
+    </div>
+    <!-- Tabla de historial -->
+    <div class="col-md-7">
+        <h4>Historial de Vacaciones</h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha Solicitud</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Días</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.HistorialVacaciones)
+                {
+                    <tr>
+                        <td>@item.fecha_solicitud.ToShortDateString()</td>
+                        <td>@item.fecha_inicio_vacaciones.ToShortDateString()</td>
+                        <td>@item.fecha_fin_vacaciones.ToShortDateString()</td>
+                        <td>@item.cantidad_dias_solicitados</td>
+                        <td>@item.Catalogo_estado_aprobacion?.descripcion_estado</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

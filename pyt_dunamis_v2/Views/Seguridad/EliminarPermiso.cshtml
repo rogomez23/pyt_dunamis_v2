@@ -1,0 +1,9 @@
+﻿@model Entidades.Permisos
+
+<h2>¿Estás seguro de que quieres eliminar el permiso @Model.nom_permiso?</h2>
+
+<form asp-action="EliminarPermiso" asp-controller="Seguridad" method="post">
+    <input type="hidden" name="id_permiso" value="@Model.id_permiso" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="@Url.Action("Permisos", "Seguridad")" class="btn btn-secondary">Cancelar</a>
+</form>

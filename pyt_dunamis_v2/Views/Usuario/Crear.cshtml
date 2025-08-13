@@ -1,0 +1,41 @@
+﻿@model UsuarioViewModel
+
+@{
+    ViewData["Title"] = "Crear Usuario";
+}
+
+<h2>Crear Usuario</h2>
+
+<form asp-action="Crear" method="post">
+    @* Oculto el ID del colaborador *@
+    <input type="hidden" asp-for="colaborador_id_colaborador" />
+    <input type="hidden" asp-for="inactivo" />
+    <input type="hidden" asp-for="id_persona" />
+
+    <div class="mb-3">
+        <label asp-for="nombre_usuario" class="form-label">Nombre de Usuario</label>
+        <input asp-for="nombre_usuario" class="form-control requerido" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="contrasena" class="form-label">Contraseña</label>
+        <input asp-for="contrasena" class="form-control validar-contrasena" type="password" />
+        <span asp-validation-for="contrasena" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Roles</label>
+        <select asp-for="rolesSeleccionados" class="form-select requerido-select" asp-items="Model.RolesDisponibles" multiple></select>
+        <span asp-validation-for="rolesSeleccionados" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar Usuario</button>
+    <a asp-action="ObtenerColaboradorDatosCompletos"
+       asp-controller="Persona"
+       asp-route-idPersona="@Model.id_persona"
+       class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

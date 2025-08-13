@@ -1,0 +1,50 @@
+﻿@model Entidades.Persona
+
+<div class="modal fade" id="editarPersonaModal" tabindex="-1" aria-labelledby="editarPersonaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarPersonaModalLabel">Editar Persona</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="EditarPersona" asp-controller="Persona" method="post">
+                    <input type="hidden" asp-for="id_persona" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="nombre" class="control-label"></label>
+                        <input asp-for="nombre" class="form-control" />
+                        <span asp-validation-for="nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="apellido_1" class="control-label"></label>
+                        <input asp-for="apellido_1" class="form-control" />
+                        <span asp-validation-for="apellido_1" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="apellido_2" class="control-label"></label>
+                        <input asp-for="apellido_2" class="form-control" />
+                        <span asp-validation-for="apellido_2" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="fecha_nacimiento" class="control-label"></label>
+                        <input asp-for="fecha_nacimiento" class="form-control" type="date" />
+                        <span asp-validation-for="fecha_nacimiento" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

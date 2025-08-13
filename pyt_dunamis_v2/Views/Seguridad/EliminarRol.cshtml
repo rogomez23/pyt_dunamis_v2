@@ -1,0 +1,9 @@
+﻿@model Entidades.Roles
+
+<h2>¿Estás seguro de que quieres eliminar el rol @Model.nombre_rol?</h2>
+
+<form asp-action="EliminarRol" asp-controller="Seguridad" method="post">
+    <input type="hidden" name="id_rol" value="@Model.id_rol" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="@Url.Action("Roles", "Seguridad")" class="btn btn-secondary">Cancelar</a>
+</form>

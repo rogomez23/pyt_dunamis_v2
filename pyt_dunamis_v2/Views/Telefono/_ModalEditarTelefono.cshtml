@@ -1,0 +1,35 @@
+﻿@model TelefonoViewModel
+
+<div class="modal fade" id="editarTelefonoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Telefono</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarTelefono" method="post">
+                    <input type="hidden" asp-for="id_telefono" />
+                    <input type="hidden" asp-for="persona_id_persona" />
+                    <input type="hidden" name="origen" value="@Context.Request.Query["origen"]" />
+
+                    <div class="mb-3">
+                        <label>Editar número de teléfono</label>
+                        <input asp-for="numero" class="form-control" />
+                        <span asp-validation-for="numero" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label>Seleccionar tipo de contacto</label>
+                        <select asp-for="catalogo_tipo_contacto_id_catalogo_tipo_contacto"
+                                asp-items="Model.TiposContacto"
+                                class="form-select"></select>
+                        <span asp-validation-for="catalogo_tipo_contacto_id_catalogo_tipo_contacto"
+                              class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

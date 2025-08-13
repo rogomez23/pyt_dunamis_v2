@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Entidades.Persona>
+
+@{
+    ViewData["Title"] = "BuscarPersona";
+}
+
+    <h1>BuscarPersona</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.id_persona)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.apellido_1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.apellido_2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.fecha_nacimiento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.inactivo)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @foreach (var item in Model)
+            {
+            <tr class="fila-clickeable" style="cursor:pointer;" data-id="@item.id_persona">
+                
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id_persona)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.apellido_1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.apellido_2)
+                    </td>
+                    <td>
+                        @item.fecha_nacimiento.ToString("yyyy-MM-dd")
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.inactivo)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="modalContainer"></div>
+    <div id="contenedor-modal-editar"></div>
+    <div id="contenedor-modal-eliminar"></div>
+
+@section Scripts {
+    <script src="~/js/modal.js"></script>
+    <script src="~/js/site.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

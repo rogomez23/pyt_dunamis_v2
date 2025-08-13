@@ -1,0 +1,45 @@
+﻿@model Entidades.Roles
+
+@{    // modal de confirmación
+    await Html.RenderPartialAsync("_ConfirmModal");
+}
+
+<h2>Asignar Permisos al Rol @Model.nombre_rol</h2>
+
+<form id="assignPermissionForm" asp-action="AsignarPermiso" asp-controller="Seguridad" method="post">
+    <input type="hidden" name="id_rol" value="@Model.id_rol" />
+
+    <div class="form-group mb-2">
+        <label>Permisos</label>
+        <select name="id_permiso" class="form-control">
+            @foreach (var permiso in ViewBag.Permisos)
+            {
+                <option value="@permiso.id_permiso">@permiso.nom_permiso</option>
+            }
+        </select>
+    </div>
+</form>
+
+<button type="button" class="btn btn-primary mb-3 action-button" data-action-type="assign" data-form-id="assignPermissionForm">Asignar Permiso</button>
+<a asp-action="Roles" class="btn btn-secondary mb-3">Cancelar</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Permiso</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var permiso in Model.PermisoRol)
+        {
+            <tr>
+                <td>@permiso.Permiso.nom_permiso</td>
+                <td>
+                    <a href="@Url.Action("QuitarPermiso", "Seguridad", new { id_rol = Model.id_rol, id_permiso = permiso.id_permiso })"
+                       class="btn btn-danger action-button" data-action-type="delete">Quitar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

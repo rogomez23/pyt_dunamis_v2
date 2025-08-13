@@ -1,0 +1,27 @@
+﻿@model Entidades.Roles
+
+@{
+    await Html.RenderPartialAsync("_ConfirmModal");
+}
+
+<h2>@(Model.id_rol == 0 ? "Crear Rol" : "Editar Rol")</h2>
+
+<form id="@((Model.id_rol == 0) ? "addPermissionForm" : "editPermissionForm")" asp-action="CrearEditarRol" asp-controller="Seguridad" method="post">
+    <input type="hidden" asp-for="id_rol" />
+
+    <div class="form-group mb-2">
+        <label asp-for="nombre_rol" class="control-label"></label>
+        <input asp-for="nombre_rol" class="form-control" />
+        <span asp-validation-for="nombre_rol" class="text-danger"></span>
+    </div>
+
+    @if (Model.id_rol == 0)
+    {
+        <button type="button" class="btn btn-primary action-button" data-action-type="add" data-form-id="addPermissionForm">Guardar</button>
+    }
+    else
+    {
+        <button type="button" class="btn btn-primary action-button" data-action-type="edit" data-form-id="editPermissionForm">Guardar</button>
+    }
+    <a asp-action="Roles" class="btn btn-secondary">Cancelar</a>
+</form>

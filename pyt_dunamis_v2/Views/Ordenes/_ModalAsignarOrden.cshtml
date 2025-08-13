@@ -1,0 +1,47 @@
+﻿@model OrdenesViewModel
+
+<div class="modal fade" id="asignarOrdenModal" tabindex="-1" aria-labelledby="asignarOrdenModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="asignarOrdenModalLabel">Asignar Orden</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="AsignarOrden" asp-controller="Ordenes" method="post">
+                    <input type="hidden" asp-for="id_orden" />
+                    <input type="hidden" asp-for="periodo_nomina_id_periodo_nomina" />
+                    <input type="hidden" asp-for="contrato_cliente" />
+                    <input type="hidden" asp-for="tipo_trabajo" />
+                    <input type="hidden" asp-for="fecha_visita" />
+                    <input type="hidden" asp-for="descripcion_trabajo" />
+                    <input type="hidden" asp-for="estado_orden_id_estado_orden" />
+                    <input type="hidden" asp-for="catalogo_estado_aprobacion_id_estado_aprobacion" />
+
+                    <input type="hidden" name="vistaOrigen" value="@ViewBag.VistaOrigen" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <!-- Combo box para seleccionar el tipo de puesto -->
+                    <div class="form-group">
+                        <label for="tipo_puesto_id">Tipo de Puesto</label>
+                        <select asp-for="tipo_puesto_id" asp-items="Model.TiposPuestos" class="form-control" id="ddlTipoPuesto"></select>
+                    </div>
+
+                    <!-- Combo box para seleccionar el colaborador -->
+                    <div class="form-group">
+                        <label for="colaborador_id_colaborador">Colaborador</label>
+                        <select asp-for="colaborador_id_colaborador" asp-items="Model.Colaboradores" class="form-control" id="ddlColaborador"></select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

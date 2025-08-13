@@ -1,0 +1,72 @@
+﻿@model List<Entidades.Vacaciones>
+@using pyt_dunamis_v2.Helpers
+
+@{
+    ViewData["Title"] = "Aprobación de Vacaciones";
+    var idColaborador = ViewBag.IdColaborador as int?
+                    ?? Model.FirstOrDefault()?.Colaborador?.id_colaborador;
+}
+
+<h2>Aprobación de Vacaciones</h2>
+
+<form asp-action="ActualizarEstadosVacaciones" method="post">
+    <div class="mb-3">
+
+        @if (SesionHelper.TienePermiso(Context, "GESTIONAR_VACACIONES_JEFES"))
+        {
+            <button type="submit" name="nuevoEstado" value="2" class="btn btn-success">Aceptar</button>
+        }
+
+        @if (SesionHelper.TienePermiso(Context, "GESTIONAR_VACACIONES_PLANILLA"))
+        {
+            <button type="submit" name="nuevoEstado" value="3" class="btn btn-success">Aceptar</button>
+        }        
+        <button type="submit" name="nuevoEstado" value="5" class="btn btn-danger">Rechazar</button>
+        <!-- Enlace de regreso -->
+        <a asp-controller="Vacaciones"
+           asp-action="PanelVacaciones"
+           asp-route-id_colaborador="@idColaborador"
+           class="btn btn-secondary">
+            Regresar
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" id="select-all" />
+                </th>
+                <th>Colaborador</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Días</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vac in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="ids" value="@vac.id_vacaciones" />
+                    </td>
+                    <td>@vac.Colaborador?.Persona?.nombre @vac.Colaborador?.Persona?.apellido_1 @vac.Colaborador?.Persona?.apellido_2</td>
+                    <td>@vac.fecha_inicio_vacaciones.ToShortDateString()</td>
+                    <td>@vac.fecha_fin_vacaciones.ToShortDateString()</td>
+                    <td>@vac.cantidad_dias_solicitados</td>
+                    <td>@vac.Catalogo_estado_aprobacion.descripcion_estado</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("select-all").addEventListener("change", function () {
+            const checkboxes = document.querySelectorAll("input[name='ids']");
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+    </script>
+}

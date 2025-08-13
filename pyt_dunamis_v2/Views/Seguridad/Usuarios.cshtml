@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Entidades.Usuarios>
+
+@{
+    // modal de confirmación
+    await Html.RenderPartialAsync("_ConfirmModal");
+}
+
+<h2>Usuarios</h2>
+
+<ul class="nav nav-tabs mb-3">
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Seguridad" asp-action="Usuarios">Usuarios</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Seguridad" asp-action="Roles">Roles</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Seguridad" asp-action="Permisos">Permisos</a>
+    </li>
+</ul>
+
+<a href="@Url.Action("CrearEditarUsuario", "Seguridad")" class="btn btn-primary mb-3">Crear Usuario</a>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre de Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.nombre_usuario</td>
+                <td>
+                    <a href="@Url.Action("CrearEditarUsuario", "Seguridad", new { id = usuario.id_usuario })" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="@Url.Action("EliminarUsuario", "Seguridad", new { id = usuario.id_usuario })" class="btn btn-danger btn-sm action-button" data-action-type="delete">Eliminar</a>
+                    <a href="@Url.Action("AsignarRoles", "Seguridad", new { id_usuario = usuario.id_usuario })" class="btn btn-info btn-sm">Asignar Roles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

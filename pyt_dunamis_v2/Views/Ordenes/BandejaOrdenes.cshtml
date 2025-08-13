@@ -1,0 +1,88 @@
+﻿@model pyt_dunamis_v2.Models.OrdenesViewModel
+@using pyt_dunamis_v2.Helpers
+
+@{
+    ViewData["Title"] = "Bandeja de órdenes";
+}
+
+<h2 class="mb-2">Bandeja de órdenes</h2>
+<ul class="nav nav-tabs mb-2">
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Ordenes" asp-action="HistorialOrdenesPorColaborador">Historial de órdenes</a>
+    </li>
+
+</ul>
+
+    <div class="col-md-6">
+        <form asp-action="BandejaOrdenes" method="get" class="mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="estadoSelect">Filtrar por estado</label>
+                    <select id="estadoSelect" name="idestado" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Todos los estados --</option>
+                        @foreach (var estado in Model.TipoEstadoOrden)
+                        {
+                            <option value="@estado.Value" selected="@estado.Selected">@estado.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabla de historial -->
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Número de orden</th>
+                    <th>Contrato de cliente</th>
+                    <th>Tipo de orden</th>
+                    <th>Fecha de visita</th>
+                    <th>Detalle de la orden</th>
+                    <th>Estado de la orden</th>
+                    <th>Colaborador</th>
+                    <th>Puesto</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!--cuando da error de null en algún campo de otras tablar, siempre revisar el AccesoDatos de tenga .Include -->
+                @foreach (var item in Model.HistorialOrdenes)  
+                {
+                    <tr>
+                        <td>@item.id_orden</td>
+                        <td>@item.contrato_cliente</td>
+                        <td>@item.tipo_trabajo</td>
+                        <td>@item.fecha_visita.ToShortDateString()</td>
+                        <td>@item.descripcion_trabajo</td>
+                        <td>@item.Estado_orden?.descripcion_estado</td>
+                        <td>@item.Colaborador.Persona.nombre @item.Colaborador.Persona.apellido_1</td>
+                        <td>@item.Colaborador.Catalogo_perfil_puesto.descripcion_puesto</td>
+                        <td>
+                            <i class="bi bi-person-circle text-primary"
+                               style="cursor:pointer; font-size: 1.2rem;"
+                               title="Asignar"
+                            onclick="mostrarModalAsignarOrden(@item.id_orden, 'BandejaOrdenes')">
+                            </i>
+                            &nbsp;&nbsp;
+                            <i class="bi bi-pencil-square text-warning"
+                               style="cursor:pointer; font-size: 1.2rem;"
+                               title="Editar"
+                               onclick="mostrarModalEditarOrden(@item.id_orden, 'BandejaOrdenes')">
+                            </i>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+<div id="contenedor-modal-editar-orden"></div>
+<div id="contenedor-modal-asignar-orden"></div>
+
+@section Scripts {
+    <script src="~/js/modal.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,214 @@
+﻿@model pyt_dunamis_v2.Models.PersonaCompletaViewModel
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Detalle de Persona";
+}
+
+<h2 class="mb-4">Información de la Persona</h2>
+
+<!-- Tabla con datos generales de la persona -->
+<table class="table sin-hover table-bordered responsive-table">
+    <thead class="table-light">
+        <tr>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Apellido 1</th>
+            <th>Apellido 2</th>
+            <th>Fecha Nacimiento</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td data-label="ID">@Model.Persona.id_persona</td>
+            <td data-label="Nombre">@Model.Persona.nombre</td>
+            <td data-label="Apellido 1">@Model.Persona.apellido_1</td>
+            <td data-label="Apellido 2">@Model.Persona.apellido_2</td>
+            <td data-label="Fecha Nac">@Model.Persona.fecha_nacimiento.ToString("yyyy-MM-dd")</td>
+            <td data-label="Estado">
+                <span class="badge @(Model.Persona.inactivo ? "bg-danger" : "bg-success")">
+                    @(Model.Persona.inactivo ? "Inactivo" : "Activo")
+                </span>
+            </td>
+            <td>
+                <i class="bi bi-pencil-square text-warning"
+                   style="cursor:pointer; font-size: 1.2rem;"
+                   title="Editar"
+                   onclick="mostrarModalEditarPersona(@Model.Persona.id_persona)">
+                </i>
+                &nbsp;&nbsp;
+                <i class="bi bi-trash text-danger"
+                   style="cursor:pointer; font-size: 1.2rem;"
+                   title="Eliminar"
+                   onclick="mostrarModalEliminarPersona(@Model.Persona.id_persona)">
+                </i>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Contenedor con tres columnas -->
+<div class="row mt-4">
+    <!-- Columna 1: Datos de contacto -->
+    <div class="col-md-4">
+        <!-- Teléfono -->
+        <div class="mb-3 border p-3 rounded">
+            <!-- Título con icono agregar a la par -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Teléfonos</h4>
+                <i class="bi bi-plus-circle text-success"
+                   style="cursor:pointer; font-size: 1.5rem;"
+                   title="Agregar Teléfono"
+                   onclick="mostrarModalTelefono('agregar', null, @Model.Persona.id_persona)">
+                </i>
+            </div>
+
+            <!-- Lista de teléfonos dentro de una sola caja -->
+            @foreach (var tel in Model.Telefono)
+            {
+                <div class="d-flex justify-content-between align-items-center border rounded p-2 mb-2">
+                    <span>@tel.numero</span>
+                    <div>
+                        <i class="bi bi-pencil-square text-warning"
+                           style="cursor:pointer; font-size: 1.2rem;"
+                           title="Editar Teléfono"
+                           onclick="mostrarModalTelefono('editar', @tel.id_telefono)">
+                        </i>
+                        &nbsp;&nbsp;
+                        <i class="bi bi-trash text-danger"
+                           style="cursor:pointer; font-size: 1.2rem;"
+                           title="Eliminar Teléfono"
+                           onclick="mostrarModalTelefono('eliminar', @tel.id_telefono)">
+                        </i>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3 border p-3 rounded">
+            <!-- Título con icono agregar a la par -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Correos Electrónicos</h4>
+                <i class="bi bi-plus-circle text-success"
+                   style="cursor:pointer; font-size: 1.5rem;"
+                   title="Agregar Email"
+                   onclick="mostrarModalEmail('agregar', null, @Model.Persona.id_persona)">
+                </i>
+            </div>
+
+            <!-- Lista de correos en una sola caja PPPPPPPP-->
+            @foreach (var correo in Model.Email)
+            {
+                <div class="d-flex justify-content-between align-items-center border rounded p-2 mb-2">
+                    <span>@correo.email</span>
+                    <div>
+                        <i class="bi bi-pencil-square text-warning"
+                           style="cursor:pointer; font-size: 1.2rem;"
+                           title="Editar Email"
+                           onclick="mostrarModalEmail('editar', @correo.id_email)">
+                        </i>
+                        &nbsp;&nbsp;
+                        <i class="bi bi-trash text-danger"
+                           style="cursor:pointer; font-size: 1.2rem;"
+                           title="Eliminar Email"
+                           onclick="mostrarModalEmail('eliminar', @correo.id_email)">
+                        </i>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Columna 2: Dirección -->
+    <div class="col-md-4">
+        <div class="mb-3 border p-3 rounded">
+            <!-- Título con ícono de agregar -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Direcciones</h4>
+                <i class="bi bi-plus-circle text-success"
+                   style="cursor:pointer; font-size: 1.5rem;"
+                   title="Agregar Dirección"
+                   onclick="mostrarModalDireccion('agregar', null, @Model.Persona.id_persona)">
+                </i>
+            </div>
+
+            <!-- Lista de direcciones -->
+            @foreach (var dir in Model.Direccion)
+            {
+                <div class="border rounded p-3 mb-3">
+                    <!-- Fila 1: Provincia - Cantón - Distrito -->
+                    <div class="row">
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <strong>Provincia:</strong> @dir.Catalogo_provincia?.descripcion_provincia
+                        </div>
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <strong>Cantón:</strong> @dir.Catalogo_canton?.descripcion_canton
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <strong>Distrito:</strong> @dir.Catalogo_distrito?.descripcion_distrito
+                        </div>
+                    </div>
+
+                    <!-- Fila 2: Puntos -->
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <strong>Puntos:</strong> @dir.puntos_referencia
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: Tipo + Iconos -->
+                    <div class="row mt-2 align-items-center">
+                        <div class="col-6">
+                            <strong>Tipo:</strong> @dir.Catalogo_tipo_direccion?.descripcion_tipo_direccion
+                        </div>
+                        <div class="col-6 text-end">
+                            <i class="bi bi-pencil-square text-warning"
+                               style="cursor:pointer; font-size: 1.2rem;"
+                               title="Editar Dirección"
+                               onclick="mostrarModalDireccion('editar', @dir.id_direccion)">
+                            </i>
+                            &nbsp;&nbsp;
+                            <i class="bi bi-trash text-danger"
+                               style="cursor:pointer; font-size: 1.2rem;"
+                               title="Eliminar Dirección"
+                               onclick="mostrarModalDireccion('eliminar', @dir.id_direccion)">
+                            </i>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Columna 3: Espacio reservado -->
+    <div class="col-md-4">
+        <h4>Otra Información</h4>
+        <div class="border p-3 rounded text-muted">
+            <p>Espacio reservado para más detalles.</p>
+        </div>
+    </div>
+</div>
+
+<div id="contenedor-modal-editar-persona"></div>
+<div id="contenedor-modal-eliminar-persona"></div>
+
+<div id="contenedor-modal-editar-email"></div>
+<div id="contenedor-modal-eliminar-email"></div>
+<div id="contenedor-modal-agregar-email"></div>
+
+<div id="contenedor-modal-agregar-telefono"></div>
+<div id="contenedor-modal-editar-telefono"></div>
+<div id="contenedor-modal-eliminar-telefono"></div>
+
+<div id="contenedor-modal-agregar-direccion"></div>
+<div id="contenedor-modal-editar-direccion"></div>
+<div id="contenedor-modal-eliminar-direccion"></div>
+
+@section Scripts {
+        <script src="~/js/modal.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

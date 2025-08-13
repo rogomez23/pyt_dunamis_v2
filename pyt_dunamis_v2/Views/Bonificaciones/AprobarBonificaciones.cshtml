@@ -1,0 +1,80 @@
+﻿@model List<Entidades.DTO.PreviewBonificacion>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using pyt_dunamis_v2.Helpers
+
+<h2>Aprobar Bonificaciones</h2>
+
+<ul class="nav nav-tabs mb-3">
+
+    @if (SesionHelper.TienePermiso(Context, "GESTIONAR_BONIFICACIONES_PLANILLA"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="BonificacionesPuesto">Asignar bonificaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="CalcularBonificaciones">Calcular bonificaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="AprobarBonificaciones">Aprobar Bonificaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="EjecutarBonificacionesNomina">Procesar a Nómina</a>
+        </li>
+    }
+
+</ul>
+
+<form asp-action="AprobarBonificaciones" method="post">
+
+    <div class="mb-3">
+
+        <button type="submit" name="nuevoEstado" value="3" class="btn btn-success">Aceptar</button>
+
+        <button type="submit" name="nuevoEstado" value="5" class="btn btn-danger">Rechazar</button>
+        <!-- Enlace de regreso -->
+        <a asp-controller="Bonificaciones"
+           asp-action="AprobarBonificaciones"
+           class="btn btn-secondary">
+            Regresar
+        </a>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="select-all" /></th>
+                <th>ID Bonif.</th>
+                <th>Puesto</th>
+                <th>Colaborador</th>
+                <th>Tipo</th>
+                <th>Monto</th>
+                <th>Período Actual</th>
+                <th>Estado Actual</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td><input type="checkbox" name="seleccionados" value="@Model[i].BonificacionId" /></td>
+                    <td>@Model[i].BonificacionId</td>
+                    <td>@Model[i].DescripcionPuesto</td>
+                    <td>@Model[i].NombreColaborador</td>
+                    <td>@Model[i].TipoBonificacion</td>
+                    <td>@Model[i].MontoCalculado.ToString("C")</td>
+                    <td>@Model[i].PeriodoNominaDesc</td>
+                    <td>@Model[i].EstadoAprobacion</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById('select-all').addEventListener('change', function(){
+          document.querySelectorAll('input[name="seleccionados"]')
+                  .forEach(cb => cb.checked = this.checked);
+        });
+    </script>
+}

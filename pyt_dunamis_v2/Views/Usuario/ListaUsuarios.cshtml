@@ -1,0 +1,40 @@
+﻿@model List<Entidades.Usuarios>
+@{
+    ViewData["Title"] = "ListaUsuarios";
+}
+
+<h1>Lista de usuarios</h1>
+
+<table class="table table-bordered responsive-table">
+    <thead>
+        <tr>
+            <th>ID Colaborador</th>
+            <th>Nombre de usuario</th>
+            <th>Contraseña</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="fila-clickeable-colaborador" data-id="@item.colaborador_id_colaborador">
+                <td data-label="ID Colaborador">@item.colaborador_id_colaborador</td>
+                <td data-label="Nombre de usuario">@item.nombre_usuario</td>
+                <td data-label="Contraseña">@item.contrasena</td>
+                <td data-label="Estado">
+                    <span class="badge @(item.inactivo ? "bg-danger" : "bg-success")">
+                        @(item.inactivo ? "Inactivo" : "Activo")
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="modalContainer"></div>
+<div id="contenedor-modal-editar"></div>
+<div id="contenedor-modal-eliminar"></div>
+
+@section Scripts {
+    <script src="~/js/modal.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

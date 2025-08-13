@@ -1,0 +1,9 @@
+﻿@model Entidades.Usuarios
+
+<h2>¿Estás seguro de que quieres eliminar el usuario @Model.nombre_usuario?</h2>
+
+<form asp-action="EliminarUsuario" asp-controller="Seguridad" method="post">
+    <input type="hidden" name="id_usuario" value="@Model.id_usuario" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="@Url.Action("Usuarios", "Seguridad")" class="btn btn-secondary">Cancelar</a>
+</form>

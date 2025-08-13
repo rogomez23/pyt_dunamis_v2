@@ -1,0 +1,39 @@
+﻿@model Entidades.Horas_extra
+@{
+    ViewData["Title"] = "Solicitar Horas Extra";    
+}
+
+<h2>Solicitar Horas Extra</h2>
+
+<div class="alert alert-info">
+    <strong>Máximo de horas a solicitar:</strong> 12
+</div>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" }) <!--Mensaje de error de ingreso porque ya existe solicitud-->
+
+<form asp-action="SolicitarHorasExtra" method="post" class="form-horizontal">
+    <div class="form-group mb-2">
+        <label asp-for="fecha_solicitud" class="control-label">Fecha de Solicitud</label>
+        <input asp-for="fecha_solicitud" class="form-control" type="date" readonly/>
+        <span asp-validation-for="fecha_solicitud" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="fecha_hora_extras" class="control-label">Fecha de ejecución</label>
+        <input asp-for="fecha_hora_extras" class="form-control" type="date" />
+        <span asp-validation-for="fecha_hora_extras" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="cantidad_extras" class="control-label">Cantidad de horas extra solicitadas</label>
+        <input asp-for="cantidad_extras" class="form-control" type="number" min="0.5" step="0.5" />
+        <span asp-validation-for="cantidad_extras" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Solicitar</button>
+    <a asp-action="PanelHorasExtra" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

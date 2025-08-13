@@ -1,0 +1,220 @@
+﻿:root {
+    --color-principal: #4FD1C5;
+    --color-principal-oscuro: #3AB4A5;
+    --color-hover: #2C7A7B;
+    --color-fondo: #F7FAFA;
+    --color-texto: #1A202C;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+/*-----------------------------------------------------------------------------------------*/
+/*
+.login-background {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--color-fondo);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}*/
+
+.login-background {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--color-fondo);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('/images/fondo-login.png'); /* Cambia por tu ruta */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Ajusta la opacidad con un overlay si querés */
+}
+
+    .login-background::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.2); /* Blanco con transparencia */
+        z-index: 0;
+    }
+
+/*--------------------------------------------------------------------------------------------*/
+
+
+.login-container {
+    z-index: 2;
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+}
+
+.login-card {
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px !important; /* Aumentamos el tamaño */
+    margin: auto;
+    transition: all 0.3s ease-in-out;
+}
+
+    .login-card input.form-control {
+        height: 50px;
+        font-size: 1.1rem;
+    }
+
+@media (max-width: 576px) {
+    .login-card {
+        max-width: 90%; /* Más responsivo para pantallas pequeñas */
+    }
+}
+
+.animated-squares {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Estilo base para todos los cuadros */
+.square {
+    position: absolute;
+    background-color: var(--color-principal);
+    opacity: 0.5;
+    border-radius: 4px;
+    animation-name: float;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+/* Cuadros individuales con tamaños, posiciones y tiempos distintos */
+.square1 {
+    width: 50px;
+    height: 50px;
+    left: 10%;
+    top: 90%;
+    animation-duration: 25s;
+    animation-delay: 0s;
+}
+
+.square2 {
+    width: 30px;
+    height: 30px;
+    left: 25%;
+    top: 110%;
+    animation-duration: 15s;
+    animation-delay: 5s;
+}
+
+.square3 {
+    width: 50px;
+    height: 50px;
+    left: 70%;
+    top: 95%;
+    animation-duration: 22s;
+    animation-delay: 2s;
+}
+
+.square4 {
+    width: 25px;
+    height: 25px;
+    left: 85%;
+    top: 105%;
+    animation-duration: 12s;
+    animation-delay: 3s;
+}
+
+.square5 {
+    width: 80px;
+    height: 80px;
+    left: 90%;
+    top: 120%;
+    animation-duration: 30s;
+    animation-delay: 6s;
+}
+
+.square6 {
+    width: 35px;
+    height: 35px;
+    left: 20%;
+    top: 115%;
+    animation-duration: 24s;
+    animation-delay: 4s;
+}
+
+.square7 {
+    width: 45px;
+    height: 45px;
+    left: 75%;
+    top: 130%;
+    animation-duration: 25s;
+    animation-delay: 7s;
+}
+
+.square8 {
+    width: 32px;
+    height: 32px;
+    left: 15%;
+    top: 125%;
+    animation-duration: 17s;
+    animation-delay: 3s;
+}
+
+.square9 {
+    width: 52px;
+    height: 52px;
+    left: 25%;
+    top: 108%;
+    animation-duration: 12s;
+    animation-delay: 5s;
+}
+
+.square10 {
+    width: 30px;
+    height: 30px;
+    left: 80%;
+    top: 115%;
+    animation-duration: 15s;
+    animation-delay: 1s;
+}
+
+
+
+/* Animación que los hace subir y girar */
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--color-principal-oscuro);
+    font-weight: 700;
+}

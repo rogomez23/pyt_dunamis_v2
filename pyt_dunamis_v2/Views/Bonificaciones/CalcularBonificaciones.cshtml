@@ -1,0 +1,74 @@
+﻿@model List<Entidades.DTO.PreviewBonificacion>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using pyt_dunamis_v2.Helpers
+
+<h2>Calcular Bonificaciones</h2>
+
+<ul class="nav nav-tabs mb-3">
+
+    @if (SesionHelper.TienePermiso(Context, "GESTIONAR_BONIFICACIONES_PLANILLA"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="BonificacionesPuesto">Asignar bonificaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="CalcularBonificaciones">Calcular bonificaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="AprobarBonificaciones">Aprobar Bonificaciones</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="EjecutarBonificacionesNomina">Procesar a Nómina</a>
+        </li>
+    }
+
+</ul>
+
+<form asp-action="CalcularBonificaciones" method="post">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="select-all" /></th>
+                <th>Puesto</th>
+                <th>Colaborador</th>
+                <th>Tipo</th>
+                <th>Bonificación</th>
+                <th>Monto Calculado</th>
+                <th>Cantidad órdenes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox"
+                               name="seleccionados"
+                               value="@i" />
+                    </td>
+                    <td>@Model[i].DescripcionPuesto</td>
+                    <td>@Model[i].NombreColaborador</td>
+                    <td>@Model[i].TipoBonificacion</td>
+                    <td>@Model[i].DescripcionBonificacion</td>
+                    <td>@Model[i].MontoCalculado.ToString("C")</td>
+                    <td>@Model[i].CantidadOrdenes</td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Guardar Seleccionadas</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById('select-all')
+          .addEventListener('change', function() {
+            document.querySelectorAll('input[name="seleccionados"]')
+                    .forEach(cb => cb.checked = this.checked);
+          });
+    </script>
+}

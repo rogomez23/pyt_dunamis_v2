@@ -1,0 +1,47 @@
+﻿@model List<PersonaCompletaViewModel>
+
+@{
+    ViewData["Title"] = "ListaColaboradores";
+}
+
+<h1>Lista de colaboradores</h1>
+
+<table class="table table-bordered responsive-table">
+    <thead>
+        <tr>
+            <th>ID Colaborador</th>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Apellido 1</th>
+            <th>Apellido 2</th>
+            <th>Puesto</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="fila-clickeable-colaborador" data-id="@item.Colaborador.persona_id_persona">
+                <td data-label="ID Colaborador">@item.Colaborador.id_colaborador</td>
+                <td data-label="Cédula">@item.Colaborador.persona_id_persona</td>
+                <td data-label="Nombre">@item.Persona.nombre</td>
+                <td data-label="Apellido 1">@item.Persona.apellido_1</td>
+                <td data-label="Apellido 2">@item.Persona.apellido_2</td>
+                <td data-label="Puesto">@item.Puesto.descripcion_puesto</td>
+                <td data-label="Estado">
+                    <span class="badge @(item.Colaborador.inactivo ? "bg-danger" : "bg-success")">
+                        @(item.Colaborador.inactivo ? "Inactivo" : "Activo")
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="modalContainer"></div>
+<div id="contenedor-modal-editar"></div>
+<div id="contenedor-modal-eliminar"></div>
+
+@section Scripts {
+    <script src="~/js/modal.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

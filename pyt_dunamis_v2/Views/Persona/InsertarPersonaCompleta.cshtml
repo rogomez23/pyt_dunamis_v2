@@ -1,0 +1,196 @@
+﻿@model pyt_dunamis_v2.Models.PersonaCompletaViewModel
+
+@{
+    ViewData["Title"] = "Insertar Persona";
+
+}
+
+<h2>Registro de Nueva Persona</h2>
+<div class="contenedor-custom mt-4">
+    
+
+    <form asp-action="InsertarPersonaCompleta" asp-controller="Persona" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <!-- Columna 1: Datos Personales -->
+            <div class="col-md-4">
+                <fieldset>
+                    <legend>Datos Personales</legend>
+
+                    <div class="border rounded p-3 mb-3 direccion-item">
+                    
+
+                        <div class="mb-2">
+                            <label>Cédula</label>
+                            <input asp-for="Persona.id_persona" type="text" class="form-control" />
+                            <span asp-validation-for="Persona.id_persona" class="text-danger"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label>Nombre</label>
+                            <input asp-for="Persona.nombre" class="form-control" />
+                            <span asp-validation-for="Persona.nombre" class="text-danger"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label>Primer Apellido</label>
+                            <input asp-for="Persona.apellido_1" class="form-control" />
+                            <span asp-validation-for="Persona.apellido_1" class="text-danger"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label>Segundo Apellido</label>
+                            <input asp-for="Persona.apellido_2" class="form-control" />
+                            <span asp-validation-for="Persona.apellido_2" class="text-danger"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label>Fecha de Nacimiento</label>
+                            <input asp-for="Persona.fecha_nacimiento" type="date" class="form-control" />
+                            <span asp-validation-for="Persona.fecha_nacimiento" class="text-danger"></span>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- Columna 2: Datos de Contacto -->
+            <div class="col-md-4">
+                <fieldset>
+                    <legend>Datos de Contacto</legend>
+
+                    <div class="border rounded p-3 mb-3 direccion-item">
+                    
+                        <div id="telefonosContainer">
+
+                            @for (int i = 0; i < Model.Telefono.Count; i++)
+                            {
+                                <div class="row mb-2 telefono-item">
+                                    <div class="col-md-7">
+                                        <label>Teléfono</label>
+                                        <input asp-for="Telefono[@i].numero" type="text" class="form-control" placeholder="Número de teléfono" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label>Tipo de contacto</label>
+                                        <select asp-for="Telefono[@i].catalogo_tipo_contacto_id_catalogo_tipo_contacto"
+                                                asp-items="Model.TiposTelefono" class="form-select"></select>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success mt-2" onclick="agregarTelefono()">+ Agregar Teléfono</button>
+
+                        <div id="emailsContainer">
+                            @for (int i = 0; i < Model.Email.Count; i++)
+                            {
+                                <div class="row mb-2 email-item">
+                                    <div class="col-md-7">
+                                        <label>Correo</label>
+                                        <input asp-for="Email[@i].email" class="form-control" placeholder="Correo electrónico" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label>Tipo de contacto</label>
+                                        <select asp-for="Email[@i].catalogo_tipo_contacto_id_catalogo_tipo_contacto"
+                                                asp-items="Model.TiposEmail" class="form-select"></select>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success mt-2" onclick="agregarEmail()">+ Agregar Email</button>
+
+                    </div>
+
+                </fieldset>
+            </div>
+
+            <!-- Columna 3: Dirección -->
+            <div class="col-md-4">
+                <fieldset>
+                    <legend>Direcciones</legend>
+                    <div id="direccionesContainer">                     
+                                          
+
+                        @for (int i = 0; i < Model.Direccion.Count; i++)
+                        {
+                            <div class="border rounded p-3 mb-3 direccion-item">
+                                <div class="mb-2">
+                                    <label>Provincia</label>
+                                    <select asp-for="Direccion[@i].catalogo_provincia_id_provincia"
+                                            asp-items="Model.Provincias" class="form-select provinciaSelect"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Cantón</label>
+                                    <select asp-for="Direccion[@i].catalogo_canton_id_canton"
+                                            class="form-select cantonSelect"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Distrito</label>
+                                    <select asp-for="Direccion[@i].catalogo_distrito_id_distrito"
+                                            class="form-select distritoSelect"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Tipo de Dirección</label>
+                                    <select asp-for="Direccion[@i].catalogo_tipo_direccion_id_tipo_direccion"
+                                            asp-items="Model.TiposDireccion" class="form-select"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Puntos de Referencia</label>
+                                    <textarea asp-for="Direccion[@i].puntos_referencia" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        }                       
+
+
+                    </div>                    
+                </fieldset>
+            </div>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+        
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        let telIndex = @Model.Telefono.Count;
+        let emailIndex = @Model.Email.Count;
+        let dirIndex = @Model.Direccion.Count;
+
+        function agregarTelefono() {
+            const container = document.getElementById('telefonosContainer');
+            const html = `
+            <div class="row mb-2 telefono-item">
+                <div class="col-md-8">
+                    <input name="Telefono[${telIndex}].numero" class="form-control" placeholder="Número de teléfono" />
+                </div>
+                <div class="col-md-4">
+                    <select name="Telefono[${telIndex}].catalogo_tipo_contacto_id_catalogo_tipo_contacto" class="form-select">
+                        ${getTipoContactoOptions('@Html.Raw(Json.Serialize(Model.TiposTelefono))')}
+                    </select>
+                </div>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+            telIndex++;
+        }
+
+        function agregarEmail() {
+            const container = document.getElementById('emailsContainer');
+            const html = `
+            <div class="row mb-2 email-item">
+                <div class="col-md-8">
+                    <input name="Email[${emailIndex}].email" class="form-control" placeholder="Correo electrónico" />
+                </div>
+                <div class="col-md-4">
+                    <select name="Email[${emailIndex}].catalogo_tipo_contacto_id_catalogo_tipo_contacto" class="form-select">
+                        ${getTipoContactoOptions('@Html.Raw(Json.Serialize(Model.TiposEmail))')}
+                    </select>
+                </div>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+            emailIndex++;
+        }
+
+        function getTipoContactoOptions(jsonData) {
+            const items = JSON.parse(jsonData.replace(/&quot;/g, '"'));
+            return items.map(i => `<option value="${i.value}">${i.text}</option>`).join('');
+        }
+    </script>
+}

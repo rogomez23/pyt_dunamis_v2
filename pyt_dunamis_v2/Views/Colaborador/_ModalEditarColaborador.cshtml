@@ -1,0 +1,35 @@
+﻿@model ColaboradorViewModel
+
+<div class="modal fade" id="editarColaboradorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Colaborador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarColaborador" method="post">
+                    <input type="hidden" asp-for="id_colaborador" />
+                    <input type="hidden" asp-for="persona_id_persona" />
+
+                    <div class="mb-3">
+                        <label>Fecha de ingreso</label>
+                        <input asp-for="fecha_ingreso" class="form-control" type="date" />
+                        <span asp-validation-for="fecha_ingreso" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>"Seleccionar puesto"</label>
+                        <select asp-for="catalogo_perfil_puesto_id_perfil_puesto"
+                                asp-items="Model.PerfilesPuestos"
+                                class="form-select"></select>
+                        <span asp-validation-for="catalogo_perfil_puesto_id_perfil_puesto"
+                              class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+﻿@model EmailViewModel
+
+<div class="modal fade" id="eliminarEmailModal" tabindex="-1" aria-labelledby="eliminarEmailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarEmailModalLabel">Eliminar Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formEliminarEmail" method="post">
+                    <input type="hidden" asp-for="id_email" />
+                    <input type="hidden" asp-for="persona_id_persona" />
+                    <input type="hidden" name="origen" value="@Context.Request.Query["origen"]" />
+
+                    <p>¿Estás seguro que deseas eliminar el siguiente email?</p>
+                    <p><strong>@Model.email</strong></p>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

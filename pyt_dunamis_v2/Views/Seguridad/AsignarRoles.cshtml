@@ -1,0 +1,45 @@
+﻿@model Entidades.Usuarios
+
+@{
+    // modal de confirmación
+    await Html.RenderPartialAsync("_ConfirmModal");
+}
+
+<h2>Asignar Roles a @Model.nombre_usuario</h2>
+
+<form id="assignPermissionForm" asp-action="AsignarRol" asp-controller="Seguridad" method="post">
+    <input type="hidden" name="id_usuario" value="@Model.id_usuario" />
+
+    <div class="form-group mb-2">
+        <label>Roles</label>
+        <select name="id_rol" class="form-control">
+            @foreach (var rol in ViewBag.Roles)
+            {
+                <option value="@rol.id_rol">@rol.nombre_rol</option>
+            }
+        </select>
+    </div>
+</form>
+<button type="button" class="btn btn-primary mb-3 action-button" data-action-type="assign" data-form-id="assignPermissionForm">Asignar Rol</button>
+<a asp-action="Usuarios" class="btn btn-secondary mb-3" >Cancelar</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rol in Model.UsuarioRoles)
+        {
+            <tr>
+                <td>@rol.Rol.nombre_rol</td>
+                <td>
+                    <a href="@Url.Action("QuitarRol", "Seguridad", new { id_usuario = Model.id_usuario, id_rol = rol.id_rol })"
+                       class="btn btn-danger delete-button" data-action-type="delete">Quitar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

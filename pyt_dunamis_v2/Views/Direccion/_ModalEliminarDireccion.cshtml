@@ -1,0 +1,45 @@
+﻿@model DireccionViewModel
+
+<div class="modal fade" id="eliminarDireccionModal" tabindex="-1" aria-labelledby="eliminarDireccionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarDireccionModalLabel">Eliminar Dirección</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formEliminarDireccion" method="post">
+                    <input type="hidden" name="origen" value="@Context.Request.Query["origen"]" />
+                    <input type="hidden" asp-for="id_direccion" />
+                    <input type="hidden" asp-for="persona_id_persona" />
+
+                    <div class="form-group">
+                        <label>Provincia</label>
+                        <select asp-for="catalogo_provincia_id_provincia" asp-items="Model.Provincias" class="form-control" disabled></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantón</label>
+                        <select asp-for="catalogo_canton_id_canton" asp-items="Model.Cantones" class="form-control" disabled></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Distrito</label>
+                        <select asp-for="catalogo_distrito_id_distrito" asp-items="Model.Distritos" class="form-control" disabled></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Referencia</label>
+                        <input asp-for="puntos_referencia" class="form-control" disabled />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@model DireccionViewModel
+
+<div class="modal fade" id="editarDireccionModal" tabindex="-1" aria-labelledby="editarDireccionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarDireccionModalLabel">Editar Dirección</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formEditarDireccion" method="post">
+                    <input type="hidden" name="origen" value="@Context.Request.Query["origen"]" />
+                    <input type="hidden" asp-for="id_direccion" />
+                    <input type="hidden" asp-for="persona_id_persona" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="puntos_referencia" class="control-label"></label>
+                        <input asp-for="puntos_referencia" class="form-control" />
+                        <span asp-validation-for="puntos_referencia" class="text-danger"></span>
+                    </div>
+                    <div class="alert alert-warning">
+                        Por favor, seleccione nuevamente la provincia, cantón y distrito.
+                    </div>
+
+                    <div class="form-group">
+                        <label>Provincia</label>
+                        <select asp-for="catalogo_provincia_id_provincia" asp-items="Model.Provincias" class="form-control" id="ddlProvincia"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantón</label>
+                        <select asp-for="catalogo_canton_id_canton" asp-items="Model.Cantones" class="form-control" id="ddlCanton"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Distrito</label>
+                        <select asp-for="catalogo_distrito_id_distrito" asp-items="Model.Distritos" class="form-control" id="ddlDistrito"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo de Dirección</label>
+                        <select asp-for="catalogo_tipo_direccion_id_tipo_direccion" asp-items="Model.TipoDireccion" class="form-control"></select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

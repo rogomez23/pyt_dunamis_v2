@@ -1,0 +1,318 @@
+﻿
+:root {
+    --color-principal: #4FD1C5; /* Verde agua: usado para botones, enlaces activos, énfasis */
+    --color-principal-oscuro: #3AB4A5; /* Tono más oscuro de verde agua para el header */
+    --color-hover: #2C7A7B; /* Hover profundo, pero armonioso */
+    --color-texto-hover: #FFFFFF;
+    --color-fondo: #F7FAFA; /* Fondo general: claro y suave */
+    --color-contenedor: #FFFFFF; /* Contenedores, tarjetas, tablas: blanco puro */
+    --color-borde-suave: #D1D5DB; /* Bordes discretos: gris claro */
+    --color-texto: #1A202C; /* Texto principal: gris muy oscuro (casi negro) */
+    --color-input-fondo: #FFFFFF; /* Input/Select: blanco */
+    --color-input-borde: #CBD5E0; /* Borde de inputs: gris claro */
+}
+
+.index-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 180px); /* Ajustá según altura del header + footer */
+    text-align: center;
+}
+
+.h1-index {
+    font-size: clamp(2.5rem, 6vw, 5.5rem); /* Mínimo, preferido (relativo al viewport), máximo */
+    color: var(--color-principal);
+    font-weight: 700;
+}
+
+.p-index {
+    font-size: clamp(1rem, 3vw, 2rem);
+    color: var(--color-principal);
+    font-weight: 500;
+}
+
+
+
+body {
+    margin-bottom: 60px;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+header {
+    background-color: var(--color-principal-oscuro);
+    color: var(--color-texto);
+    padding: 1rem;
+    height: 80px;
+}
+
+
+.container,
+.card,
+.table-container,
+.contenedor-custom {
+    background-color: var(--color-contenedor);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+table {
+    color: var(--color-texto);
+    background-color: var(--color-contenedor);
+    border-color: var(--color-borde-suave);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    text-align: center;
+
+}
+
+    table thead {
+        background-color: var(--color-principal);
+        color: var(--color-texto);
+        border-color: var(--color-borde-suave);
+    }
+
+    table tbody {
+        color: var(--color-texto);
+    }
+
+    table:not(.sin-hover) tbody tr:hover {
+        background-color: var(--color-principal-oscuro);
+        color: var(--color-texto-hover) !important;
+    }
+
+/* Modal de confirmación */
+.modal {
+    display: none;
+    z-index: 1050;
+}
+
+.modal-backdrop {
+    z-index: 1040;
+}
+
+/* ===============================
+   ✍️ FORMULARIOS
+   =============================== */
+input,
+select,
+textarea {
+    background-color: var(--color-input-fondo) !important;
+    color: var(--color-texto) !important;
+    border: 1px solid var(--color-input-borde) !important;
+}
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--color-principal) !important;
+        outline: none !important;
+        box-shadow: 0 0 5px var(--color-principal)!important;
+    }
+
+
+.sidebar {
+    width: 250px;
+    background-color: var(--color-principal);
+    max-height: calc(100vh - 80px); /* 70px = altura de tu header */
+    overflow-y: auto;
+    top: 70px; /* Debajo del navbar */
+    left: 0;
+}
+
+
+/* ======= BOTÓN-LINK LIGERO ======= */
+.nav-link-custom {
+    color: var(--color-texto) !important;
+    background-color: transparent !important;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+    /* Hover o selección */
+    .nav-link-custom:hover,
+    .nav-link-custom:focus,
+    .nav-link-custom.active {
+        background-color: var(--color-hover) !important;
+        color: var(--color-texto-hover) !important;
+    }
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255,255,255,1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Estilo para los enlaces nav */
+.nav-link {
+    background-color: var(--color-principal); /* Fondo verde agua claro */
+    color: var(--color-texto) !important; /* Texto en color estándar */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+}
+
+    /* Cuando el puntero está sobre el enlace o está seleccionado */
+    .nav-link:hover,
+    .nav-link:focus,
+    .nav-link.active {
+        background-color: var(--color-principal-oscuro); /* Fondo verde agua más oscuro */
+        color: var(--color-texto-hover) !important; /* Cambiar el color del texto */
+    }
+
+    /* Para enlaces activos o seleccionados */
+    .nav-link.active {
+        background-color: var(--color-principal-oscuro); /* Fondo verde agua más oscuro */
+        color: var(--color-texto-hover) !important; /* Texto blanco cuando está activo */
+    }
+
+
+.chevron-icon,
+.bi-chevron-down{
+    transition: transform 0.3s ease;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+
+/* Comportamiento responsive para tabla */
+@media screen and (max-width: 768px) {
+    .responsive-table {
+        border: 0;
+        width: 100%;
+    }
+
+        .responsive-table thead {
+            display: none;
+        }
+
+        .responsive-table tr {
+            display: block;
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+        }
+
+        .responsive-table td {
+            display: flex;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #dee2e6;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+            .responsive-table td::before {
+                content: attr(data-label);
+                flex: 0 0 35%; /* 👈 1/3 aprox del ancho */
+                font-weight: 600;
+                color: #343a40;
+                padding-right: 1rem;
+                text-align: left;
+                border-right: 1px solid #ced4da;
+                margin-right: 1rem;
+            }
+
+            .responsive-table td:last-child {
+                border-bottom: none;
+            }
+}
+
+
+
+@media (max-width: 576px) {
+    #busquedaCollapse {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+        #busquedaCollapse input,
+        #busquedaCollapse select,
+        #busquedaCollapse button {
+            width: 100% !important;
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+
+
+
+
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.app-wrapper {
+    display: flex;
+    height: calc(100vh - 80px);
+}
+
+
+
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+    .content main {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+footer {
+    padding: 1rem;
+}
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        display: none;
+    }
+
+        .sidebar.offcanvas {
+            display: block;
+        }
+}

@@ -1,0 +1,98 @@
+﻿@model List<Entidades.Vacaciones>
+@using pyt_dunamis_v2.Helpers
+
+@{
+    ViewData["Title"] = "Ejecutar vacaciones a nómina";
+    // Suponemos que el id_colaborador se pasó desde el controlador,
+    // ya sea en ViewBag o en ViewData:
+    var idColaborador = ViewBag.IdColaborador as int?
+                    ?? Model.FirstOrDefault()?.Colaborador?.id_colaborador;
+}
+
+<h2>Procesar a nómina</h2>
+
+<form asp-action="ActualizarPeriodo" method="post">
+    <div class="mb-3">
+
+        @if (SesionHelper.TienePermiso(Context, "GESTIONAR_VACACIONES_PLANILLA"))
+        {
+
+            <div class="mb-3">
+                <label for="idPeriodoSeleccionado" class="form-label">Periodo de nómina</label>
+                <select name="idPeriodoSeleccionado" id="idPeriodoSeleccionado" class="form-select" required>
+                    <option value="">Seleccionar periodo de nómina</option>
+                    @foreach (var periodo in (SelectList)ViewBag.Periodos)
+                    {
+                        <option value="@periodo.Value">@periodo.Text</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" name="nuevoEstado" value="3" class="btn btn-success">Aceptar</button>
+        }
+        
+        <!-- Enlace de regreso -->
+        <a asp-controller="Vacaciones"
+           asp-action="PanelVacaciones"
+           asp-route-id_colaborador="@idColaborador"
+           class="btn btn-secondary">
+            Regresar
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" id="select-all" />
+                </th>
+                <th>Colaborador</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Días</th>
+                <th>Estado</th>
+                <th>Periodo de Nómina</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vac in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="ids" value="@vac.id_vacaciones" />
+                    </td>
+                    <td>@vac.Colaborador?.Persona?.nombre @vac.Colaborador?.Persona?.apellido_1 @vac.Colaborador?.Persona?.apellido_2</td>
+                    <td>@vac.fecha_inicio_vacaciones.ToShortDateString()</td>
+                    <td>@vac.fecha_fin_vacaciones.ToShortDateString()</td>
+                    <td>@vac.cantidad_dias_solicitados</td>
+                    <td>@vac.Catalogo_estado_aprobacion.descripcion_estado</td>
+                    <td>@vac.Periodo_nomina.nombre_periodo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("select-all").addEventListener("change", function () {
+            const checkboxes = document.querySelectorAll("input[name='ids']");
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const periodo = document.getElementById("idPeriodoSeleccionado").value;
+            const checkboxes = document.querySelectorAll("input[name='ids']:checked");
+
+            if (!periodo) {
+                alert("Por favor, seleccione un periodo de nómina.");
+                e.preventDefault();
+                return;
+            }
+
+            if (checkboxes.length === 0) {
+                alert("Debe seleccionar al menos una fila.");
+                e.preventDefault();
+            }
+        });
+    </script>
+}

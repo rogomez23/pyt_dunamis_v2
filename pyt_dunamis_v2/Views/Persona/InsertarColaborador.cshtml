@@ -1,0 +1,275 @@
+﻿@model pyt_dunamis_v2.Models.PersonaCompletaViewModel
+
+@{
+    ViewData["Title"] = "Insertar Colaborador";
+
+}
+
+@* Mostrar errores generales *@
+@if (ViewBag.PersonaDuplicada != null)
+{
+    <div class="alert alert-danger" id="personaDuplicadaAlerta">
+        @ViewBag.PersonaDuplicada
+    </div>
+}
+
+<h2 class="mb-3">Registro de Nuevo Colaborador</h2>
+
+
+
+    <form asp-action="InsertarColaborador" asp-controller="Persona" method="post">
+
+        <div class="row">
+            <!-- Columna 1: Datos Personales -->
+            <div class="col-md-4">
+                <fieldset>                   
+
+                    <div class="border rounded p-3 mb-3 direccion-item contenedor-custom">
+                        <h4 class="mb-3">Datos Personales</h4>
+
+                        <div class="mb-2">
+                            <label>Número de cédula</label>
+                        <input asp-for="Persona.id_persona" class="form-control requerido validar-cedula mask-cedula" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Nombre del Colaborador</label>
+                        <input asp-for="Persona.nombre" class="form-control requerido solo-texto" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Primer Apellido</label>
+                        <input asp-for="Persona.apellido_1" class="form-control requerido solo-texto" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Segundo Apellido</label>
+                        <input asp-for="Persona.apellido_2" class="form-control requerido solo-texto" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Fecha de Nacimiento</label>
+                        <input asp-for="Persona.fecha_nacimiento" type="date" class="form-control requerido validar-fecha-nacimiento" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- Columna 3: Dirección -->
+            <div class="col-md-4">
+                <fieldset>
+                    <div id="direccionesContainer">
+                        
+
+
+                        @for (int i = 0; i < Model.Direccion.Count; i++)
+                        {
+                            <div class="border rounded p-3 mb-3 direccion-item contenedor-custom">
+                                <h4 class="mb-3">Direcciones</h4>
+                                <div class="mb-2">
+                                    <label>Provincia</label>
+                                    <select asp-for="Direccion[@i].catalogo_provincia_id_provincia"
+                                            asp-items="Model.Provincias" class="form-select provinciaSelect requerido-select"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Cantón</label>
+                                    <select asp-for="Direccion[@i].catalogo_canton_id_canton"
+                                            class="form-select cantonSelect requerido-select"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Distrito</label>
+                                    <select asp-for="Direccion[@i].catalogo_distrito_id_distrito"
+                                            class="form-select distritoSelect requerido-select"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Tipo de Dirección</label>
+                                    <select asp-for="Direccion[@i].catalogo_tipo_direccion_id_tipo_direccion"
+                                            asp-items="Model.TiposDireccion" class="form-select"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Puntos de Referencia</label>
+                                    <textarea asp-for="Direccion[@i].puntos_referencia" class="form-control requerido" style="height: 40px;"></textarea>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- Columna 2: Datos de Contacto -->
+            <div class="col-md-4">
+                <fieldset>
+                    <div class="border rounded p-3 mb-3 direccion-item contenedor-custom">
+                        <h4 class="mb-3">Datos de Contacto</h4>
+
+                        <div id="telefonosContainer">
+
+                            @for (int i = 0; i < Model.Telefono.Count; i++)
+                            {
+                                <div class="row mb-2 telefono-item">
+                                    <div class="col-md-7">
+                                        <label>Teléfono</label>
+                                        <input asp-for="Telefono[@i].numero" type="text" class="form-control requerido validar-numero" placeholder="Número de teléfono" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label>Tipo de contacto</label>
+                                        <select asp-for="Telefono[@i].catalogo_tipo_contacto_id_catalogo_tipo_contacto"
+                                                asp-items="Model.TiposTelefono" class="form-select"></select>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success mt-2 mb-4" onclick="agregarTelefono()">+ Agregar Teléfono</button>
+
+                        <div id="emailsContainer">
+                            @for (int i = 0; i < Model.Email.Count; i++)
+                            {
+                                <div class="row mb-2 email-item">
+                                    <div class="col-md-7">
+                                        <label>Correo</label>
+                                        <input asp-for="Email[@i].email" class="form-control requerido validar-email" placeholder="Correo electrónico" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label>Tipo de contacto</label>
+                                        <select asp-for="Email[@i].catalogo_tipo_contacto_id_catalogo_tipo_contacto"
+                                                asp-items="Model.TiposEmail" class="form-select"></select>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success mt-2" onclick="agregarEmail()">+ Agregar Email</button>
+
+                    </div>
+
+                </fieldset>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <fieldset>
+                                <div class="border rounded p-3 mb-3 direccion-item contenedor-custom">
+                    <h4 class="mb-3">Puesto asignado</h4>
+                                    <div class="mb-2">
+                                        <label>Puesto</label>
+                                        <select asp-for="Colaborador.catalogo_perfil_puesto_id_perfil_puesto"
+                                    asp-items="Model.PerfilesPuestos" class="form-select requerido-select"></select>
+                                    </div>
+                                </div>
+                </fieldset>
+            </div>
+
+            <div class="col-md-4">
+                <fieldset>
+                <div class="border rounded p-3 mb-3 direccion-item contenedor-custom">
+                    <h4 class="mb-3">Fecha de Ingreso</h4>
+                        <div class="mb-2">
+                            <label>Fecha de Ingreso</label>
+                            <input asp-for="Colaborador.fecha_ingreso" type="date" class="form-control requerido validar-fecha" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+
+            <div class="col-md-4">
+                <fieldset>
+                <div class="border rounded p-3 mb-3 direccion-item contenedor-custom">
+                    <h4 class="mb-3">Estado del Colaborador</h4>
+                        <div class="form-check form-switch">
+                            <input asp-for="Colaborador.inactivo"
+                                   class="form-check-input"
+                                   type="checkbox"
+                                   id="estadoColaborador" />
+                            <label class="form-check-label" for="estadoColaborador">
+                                Inactivo
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+    </form>
+
+
+@section Scripts {
+    <script>
+        
+        let telIndex = @Model.Telefono.Count;
+        let emailIndex = @Model.Email.Count;
+        let dirIndex = @Model.Direccion.Count;
+
+        function agregarTelefono() {
+            const container = document.getElementById('telefonosContainer');
+            const html = `
+            <div class="row mb-2 telefono-item">
+                <div class="col-md-7">
+                    <input name="Telefono[${telIndex}].numero" class="form-control requerido validar-numero" placeholder="Número de teléfono" />
+                </div>
+                <div class="col-md-5">
+                    <select name="Telefono[${telIndex}].catalogo_tipo_contacto_id_catalogo_tipo_contacto" class="form-select">
+                        ${getTipoContactoOptions('@Html.Raw(Json.Serialize(Model.TiposTelefono))')}
+                    </select>
+                </div>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+            telIndex++;
+        }
+
+        function agregarEmail() {
+            const container = document.getElementById('emailsContainer');
+            const html = `
+            <div class="row mb-2 email-item">
+                <div class="col-md-7">
+                    <input name="Email[${emailIndex}].email" class="form-control requerido validar-email" placeholder="Correo electrónico" />
+                </div>
+                <div class="col-md-5">
+                    <select name="Email[${emailIndex}].catalogo_tipo_contacto_id_catalogo_tipo_contacto" class="form-select">
+                        ${getTipoContactoOptions('@Html.Raw(Json.Serialize(Model.TiposEmail))')}
+                    </select>
+                </div>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+            emailIndex++;
+        }
+
+        function getTipoContactoOptions(jsonData) {
+            const items = JSON.parse(jsonData.replace(/&quot;/g, '"'));
+            return items.map(i => `<option value="${i.value}">${i.text}</option>`).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkbox = document.getElementById('estadoColaborador');
+
+            let estadoInicial = checkbox.checked;
+
+            checkbox.addEventListener('change', function (e) {
+                const confirmado = confirm('¿Está seguro que desea cambiar el estado del colaborador?');
+                if (!confirmado) {
+                    // Revertir al estado anterior si cancela
+                    checkbox.checked = estadoInicial;
+                } else {
+                    // Guardar nuevo estado como base para futuros cambios
+                    estadoInicial = checkbox.checked;
+                }
+            });
+        });
+
+        window.addEventListener("DOMContentLoaded", function () {
+            var mensaje = '@ViewBag.PersonaDuplicada';
+            if (mensaje) {
+                alert(mensaje); // o usar toastr.error(mensaje);
+            }
+        });
+
+    </script>
+
+}

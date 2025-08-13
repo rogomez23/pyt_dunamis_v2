@@ -1,0 +1,113 @@
+﻿@model BonificacionPuestoViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using pyt_dunamis_v2.Helpers
+
+<h2>Asignar/Quitar Bonificaciones a Puestos</h2>
+
+
+<ul class="nav nav-tabs mb-3">
+
+    @if (SesionHelper.TienePermiso(Context, "GESTIONAR_BONIFICACIONES_PLANILLA"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="BonificacionesPuesto">Asignar bonificaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="CalcularBonificaciones">Calcular bonificaciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="AprobarBonificaciones">Aprobar Bonificaciones</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Bonificaciones" asp-action="EjecutarBonificacionesNomina">Procesar a Nómina</a>
+        </li>
+    }
+
+</ul>
+
+
+
+@* Mensajes generales *@
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+
+
+<form asp-controller="Bonificaciones" method="post">
+    <div class="row mb-4">
+        <div class="col-md-5">
+            <label>Puesto</label>
+            <select asp-for="SelectedPuesto"
+                    asp-items="Model.Puestos"
+                    class="form-select requerido-select">
+                <option value="">--Seleccionar--</option>
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label>Bonificación</label>
+            <select asp-for="SelectedBonificacion"
+                    asp-items="Model.Bonificaciones"
+                    class="form-select requerido-select">
+                <option value="">--Seleccionar--</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <!-- Botón Asignar: usa la acción por defecto (Asignar) -->
+            <button type="submit"
+                    formaction="@Url.Action("Asignar","Bonificaciones")"
+                    class="btn btn-success me-2">
+                Asignar
+            </button>
+            <!-- Botón Quitar: redirige a Quitar -->
+            <button type="submit"
+                    formaction="@Url.Action("Quitar","Bonificaciones")"
+                    class="btn btn-danger">
+                Quitar
+            </button>
+        </div>
+    </div>
+</form>
+
+<h4>Puestos con Bonificaciones</h4>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>ID Puesto</th>
+            <th>Descripción Puesto</th>
+            <th>Salario Base</th>
+            <th>ID Bonificación</th>
+            <th>Descripción Bonificación</th>
+            <th>Tipo Bonificación</th>
+            <th>Monto Fijo</th>
+            <th>%Porcentaje</th>
+            <th>Rango Mín</th>
+            <th>Rango Máx</th>
+        </tr>
+    </thead>
+    <tbody>
+        @* Recorremos cada puesto y luego cada bonificación asignada *@
+        @foreach (var puesto in Model.PuestosConBon)
+        {
+            foreach (var bp in puesto.Bonificacion_puesto)
+            {
+                var bon = bp.catalogo_Bonificaciones;
+                <tr>
+                    <td>@puesto.id_perfil_puesto</td>
+                    <td>@puesto.descripcion_puesto</td>
+                    <td>@puesto.salario_base.ToString("C")</td>
+                    <td>@bon.id_catalogo_bonificacion</td>
+                    <td>@bon.descripcion_bonificacion</td>
+                    <td>@bon.tipo_bonificacion</td>
+                    <td>@bon.monto_fijo.ToString("C")</td>
+                    <td>@bon.porcentaje</td>
+                    <td>@bon.rango_min</td>
+                    <td>@bon.rango_max</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

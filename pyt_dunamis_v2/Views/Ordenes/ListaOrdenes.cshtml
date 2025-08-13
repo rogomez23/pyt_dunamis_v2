@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Entidades.Ordenes>
+
+@{
+    ViewData["Title"] = "Lista de órdenes";
+}
+
+<h1>Lista de órdenes</h1>
+
+
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Número de orden</th>
+            <th>Contrato de cliente</th>
+            <th>Tipo de orden</th>
+            <th>Fecha de visita</th>
+            <th>Detalle de la orden</th>
+            <th>Estado de la orden</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_orden</td>
+                <td>@item.contrato_cliente</td>
+                <td>@item.tipo_trabajo</td>
+                <td>@item.fecha_visita.ToShortDateString()</td>
+                <td>@item.descripcion_trabajo</td>
+                <td>@item.Estado_orden?.descripcion_estado</td>
+                <td>
+                    <i class="bi bi-pencil-square text-warning"
+                       style="cursor:pointer; font-size: 1.2rem;"
+                       title="Editar"
+                       onclick="mostrarModalEditarOrden(@item.id_orden, 'ListaOrdenes')">
+                    </i>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="contenedor-modal-editar-orden"></div>
+<div id="contenedor-modal-eliminar-orden"></div>
+
+@section Scripts {
+    <script src="~/js/modal.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
