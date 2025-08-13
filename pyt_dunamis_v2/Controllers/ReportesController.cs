@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using pyt_dunamis_v2.Helpers;
 using pyt_dunamis_v2.Models;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace pyt_dunamis_v2.Controllers
 {
@@ -21,7 +24,7 @@ namespace pyt_dunamis_v2.Controllers
         }
 
         [HttpGet]
-        public IActionResult ReportesOrdenes(int? idestado, DateTime? fecha_visita)
+        public IActionResult ReportesOrdenes(int? idestado, DateTime? fechaInicio, DateTime? fechaFin)
         {
             // Obtener lista de estados para el filtro
             var estados = _catalogoLN.ObtenerCatalogoEstadoOrden();
@@ -34,9 +37,14 @@ namespace pyt_dunamis_v2.Controllers
                 lista = lista.Where(o => o.estado_orden_id_estado_orden == idestado.Value).ToList();
             }
 
-            if (fecha_visita.HasValue)
+            if (fechaInicio.HasValue)
             {
-                lista = lista.Where(o => o.fecha_visita.Date == fecha_visita.Value.Date).ToList();
+                lista = lista.Where(o => o.fecha_visita.Date >= fechaInicio.Value.Date).ToList();
+            }
+
+            if (fechaFin.HasValue)
+            {
+                lista = lista.Where(o => o.fecha_visita.Date <= fechaFin.Value.Date).ToList();
             }
 
             var vm = new OrdenesViewModel
@@ -48,10 +56,95 @@ namespace pyt_dunamis_v2.Controllers
                     Text = e.descripcion_estado,
                     Selected = (idestado.HasValue && e.id_estado_orden == idestado.Value)
                 }).ToList(),
-                fecha_visita = fecha_visita ?? default(DateTime)
+                fechaInicio = fechaInicio,
+                fechaFin = fechaFin
             };
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult ReportesOrdenesPdf(int? idestado, DateTime? fechaInicio, DateTime? fechaFin)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var lista = _ordenesLN.ObtenerTodasOrdenes();
+
+            if (idestado.HasValue)
+            {
+                lista = lista.Where(o => o.estado_orden_id_estado_orden == idestado.Value).ToList();
+            }
+
+            if (fechaInicio.HasValue)
+            {
+                lista = lista.Where(o => o.fecha_visita.Date >= fechaInicio.Value.Date).ToList();
+            }
+
+            if (fechaFin.HasValue)
+            {
+                lista = lista.Where(o => o.fecha_visita.Date <= fechaFin.Value.Date).ToList();
+            }
+
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(30);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Header()
+                        .AlignCenter()
+                        .Text("Reporte de órdenes").SemiBold().FontSize(20);
+
+                    page.Content().Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.ConstantColumn(40);
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                        });
+
+                        table.Header(header =>
+                        {
+                            header.Cell().Element(CellStyle).Text("N°");
+                            header.Cell().Element(CellStyle).Text("Contrato");
+                            header.Cell().Element(CellStyle).Text("Tipo");
+                            header.Cell().Element(CellStyle).Text("Fecha");
+                            header.Cell().Element(CellStyle).Text("Detalle");
+                            header.Cell().Element(CellStyle).Text("Estado");
+                            header.Cell().Element(CellStyle).Text("Colaborador");
+                            header.Cell().Element(CellStyle).Text("Puesto");
+                        });
+
+                        foreach (var o in lista)
+                        {
+                            table.Cell().Element(CellStyle).Text(o.id_orden.ToString());
+                            table.Cell().Element(CellStyle).Text(o.contrato_cliente);
+                            table.Cell().Element(CellStyle).Text(o.tipo_trabajo);
+                            table.Cell().Element(CellStyle).Text(o.fecha_visita.ToShortDateString());
+                            table.Cell().Element(CellStyle).Text(o.descripcion_trabajo);
+                            table.Cell().Element(CellStyle).Text(o.Estado_orden?.descripcion_estado ?? string.Empty);
+                            table.Cell().Element(CellStyle).Text(o.Colaborador.Persona.nombre + " " + o.Colaborador.Persona.apellido_1);
+                            table.Cell().Element(CellStyle).Text(o.Colaborador.Catalogo_perfil_puesto.descripcion_puesto);
+                        }
+                    });
+                });
+            });
+
+            byte[] pdf = document.GeneratePdf();
+            return File(pdf, "application/pdf", "ReporteOrdenes.pdf");
+
+            static IContainer CellStyle(IContainer container)
+            {
+                return container.Padding(5).Border(1);
+            }
         }
 
         public ActionResult ReportesEmpleados()
