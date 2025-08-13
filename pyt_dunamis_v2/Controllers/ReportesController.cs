@@ -66,6 +66,8 @@ namespace pyt_dunamis_v2.Controllers
         [HttpGet]
         public IActionResult ReportesOrdenesPdf(int? idestado, DateTime? fechaInicio, DateTime? fechaFin)
         {
+            QuestPDF.Settings.License = LicenseType.Community;
+
             var lista = _ordenesLN.ObtenerTodasOrdenes();
 
             if (idestado.HasValue)
