@@ -24,7 +24,7 @@ namespace pyt_dunamis_v2.Controllers
         }
 
         [HttpGet]
-        public IActionResult ReportesOrdenes(int? idestado, DateTime? fecha_visita)
+        public IActionResult ReportesOrdenes(int? idestado, DateTime? fechaInicio, DateTime? fechaFin)
         {
             // Obtener lista de estados para el filtro
             var estados = _catalogoLN.ObtenerCatalogoEstadoOrden();
@@ -37,9 +37,14 @@ namespace pyt_dunamis_v2.Controllers
                 lista = lista.Where(o => o.estado_orden_id_estado_orden == idestado.Value).ToList();
             }
 
-            if (fecha_visita.HasValue)
+            if (fechaInicio.HasValue)
             {
-                lista = lista.Where(o => o.fecha_visita.Date == fecha_visita.Value.Date).ToList();
+                lista = lista.Where(o => o.fecha_visita.Date >= fechaInicio.Value.Date).ToList();
+            }
+
+            if (fechaFin.HasValue)
+            {
+                lista = lista.Where(o => o.fecha_visita.Date <= fechaFin.Value.Date).ToList();
             }
 
             var vm = new OrdenesViewModel
@@ -51,14 +56,15 @@ namespace pyt_dunamis_v2.Controllers
                     Text = e.descripcion_estado,
                     Selected = (idestado.HasValue && e.id_estado_orden == idestado.Value)
                 }).ToList(),
-                fecha_visita = fecha_visita ?? default(DateTime)
+                fechaInicio = fechaInicio,
+                fechaFin = fechaFin
             };
 
             return View(vm);
         }
 
         [HttpGet]
-        public IActionResult ReportesOrdenesPdf(int? idestado, DateTime? fecha_visita)
+        public IActionResult ReportesOrdenesPdf(int? idestado, DateTime? fechaInicio, DateTime? fechaFin)
         {
             var lista = _ordenesLN.ObtenerTodasOrdenes();
 
@@ -67,9 +73,14 @@ namespace pyt_dunamis_v2.Controllers
                 lista = lista.Where(o => o.estado_orden_id_estado_orden == idestado.Value).ToList();
             }
 
-            if (fecha_visita.HasValue)
+            if (fechaInicio.HasValue)
             {
-                lista = lista.Where(o => o.fecha_visita.Date == fecha_visita.Value.Date).ToList();
+                lista = lista.Where(o => o.fecha_visita.Date >= fechaInicio.Value.Date).ToList();
+            }
+
+            if (fechaFin.HasValue)
+            {
+                lista = lista.Where(o => o.fecha_visita.Date <= fechaFin.Value.Date).ToList();
             }
 
             var document = Document.Create(container =>

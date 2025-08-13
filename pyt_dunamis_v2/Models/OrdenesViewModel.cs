@@ -22,6 +22,9 @@ namespace pyt_dunamis_v2.Models
 
         public int? tipo_puesto_id { get; set; }
 
+        public DateTime? fechaInicio { get; set; }
+        public DateTime? fechaFin { get; set; }
+
         [ValidateNever]
         public List<SelectListItem> TipoEstadoOrden { get; set; }
         [ValidateNever]
