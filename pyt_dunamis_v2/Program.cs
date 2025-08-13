@@ -5,17 +5,19 @@ using LogicaNegocio.Implementacion;
 using LogicaNegocio.Interfaz;
 using LogicaNegocio.Servicios;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 
 var builder = WebApplication.CreateBuilder(args);
+QuestPDF.Settings.License = LicenseType.Community;
 
 
 
-// Conexión a MySQL
+// ConexiÃ³n a MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("ConexionMySQL")));
 
-// Inyección de dependencias
+// InyecciÃ³n de dependencias
 builder.Services.AddScoped<IPersonaAD, PersonaAD>();
 builder.Services.AddScoped<IPersonaLN, PersonaLN>();
 

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using pyt_dunamis_v2.Helpers;
 using pyt_dunamis_v2.Models;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
 
 namespace pyt_dunamis_v2.Controllers
 {
@@ -52,6 +54,74 @@ namespace pyt_dunamis_v2.Controllers
             };
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult ExportarOrdenesPdf(int? idestado, DateTime? fecha_visita)
+        {
+            var lista = _ordenesLN.ObtenerTodasOrdenes();
+
+            if (idestado.HasValue)
+            {
+                lista = lista.Where(o => o.estado_orden_id_estado_orden == idestado.Value).ToList();
+            }
+
+            if (fecha_visita.HasValue)
+            {
+                lista = lista.Where(o => o.fecha_visita.Date == fecha_visita.Value.Date).ToList();
+            }
+
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(20);
+                    page.Header().Text("Reporte de órdenes").FontSize(18).Bold().AlignCenter();
+
+                    page.Content().Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                        });
+
+                        table.Header(header =>
+                        {
+                            header.Cell().Text("Número de orden");
+                            header.Cell().Text("Contrato de cliente");
+                            header.Cell().Text("Tipo de orden");
+                            header.Cell().Text("Fecha de visita");
+                            header.Cell().Text("Detalle");
+                            header.Cell().Text("Estado");
+                            header.Cell().Text("Colaborador");
+                            header.Cell().Text("Puesto");
+                        });
+
+                        foreach (var item in lista)
+                        {
+                            table.Cell().Text(item.id_orden.ToString());
+                            table.Cell().Text(item.contrato_cliente);
+                            table.Cell().Text(item.tipo_trabajo);
+                            table.Cell().Text(item.fecha_visita.ToShortDateString());
+                            table.Cell().Text(item.descripcion_trabajo);
+                            table.Cell().Text(item.Estado_orden?.descripcion_estado ?? "");
+                            table.Cell().Text($"{item.Colaborador?.Persona?.nombre} {item.Colaborador?.Persona?.apellido_1}");
+                            table.Cell().Text(item.Colaborador?.Catalogo_perfil_puesto?.descripcion_puesto ?? "");
+                        }
+                    });
+                });
+            });
+
+            var pdf = document.GeneratePdf();
+            return File(pdf, "application/pdf", "ReporteOrdenes.pdf");
         }
 
         public ActionResult ReportesEmpleados()
